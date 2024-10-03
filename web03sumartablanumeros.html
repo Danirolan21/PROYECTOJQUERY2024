@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {
+            border-spacing: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sumar números</h1>
+    <label for="">Número 1</label>
+    <input type="text" name="" id="cajanumero1"><br>
+    <label for="">Número 2</label>
+    <input type="text" name="" id="cajanumero2"><br><br>
+    <button id="botonsumar">Sumar números</button>
+    <h1 id="resultado"></h1>
+
+    <hr><hr>
+    <h1>Tabla de Multiplicar</h1>
+    <label>Número tabla multiplicar</label>
+    <input type="text" name="" id="cajatabla"><br><br>
+    <button id="botontabla">Tabla multiplicar</button><br><br>
+    <table id="tabla" border="1"></table>
+    
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#botontabla").click(function() {
+                var num = parseInt($("#cajatabla").val());
+                var html = "";
+                for (var i = 0; i <= 10; i++) {
+                    var operacion = num * i;
+                    var texto = num + " * " + i + " =";
+                    html += "<tr>";
+                    html += "<td>" + texto + "</td>";
+                    html += "<td>" + operacion + "</td>";
+                    html += "</td>";
+                    
+                }
+                $("#tabla").html(html);
+            })
+
+            $("#botonsumar").click(function() {
+                var num1 = $("#cajanumero1").val();
+                var num2 = $("#cajanumero2").val();
+                var suma = parseInt(num1) + parseInt(num2);
+                $("#resultado").text("La suma es " + suma);
+            })
+        })
+    </script>
+</body>
+</html>
