@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table#mitabla {border-collapse: collapse;}
+        td {background-color: #ff455e;}
+
+        td {background-color: #243ff0;}
+
+        td {background-color: #f8ff94;}
+
+        thead.cabecera tr td {
+            font-family: monospace;
+            font-size: 30px;
+            font-weight: bold;
+            color: #ffffff;
+            padding: 15px;}
+
+        tfoot.pie tr td {
+            font-size: 18px;
+            font-weight: bold;
+            font-family: Georgia;
+            padding: 2px;}
+
+        tbody.cuerpo tr td {
+            color: #ebebeb;
+            padding: 10px;}
+
+        td {border-style: solid;
+            border-color: #cccccc;
+        border-width: 1px;}
+    </style>
+</head>
+<body>
+    <h1>Departamentos XML</h1>
+    <button id="botoncargar">Cargar departamentos</button>
+    <table id="tabladepartamentos"></table>
+
+
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#botoncargar").click(function() {
+                $.get("documents/departamentos.xml", function(data) {
+                    console.log("leyendo...");
+                    var html = "";
+                    $(data).find("DEPT").each(function() {
+                        html += "<tr>";
+                        var numero = $(this).attr("DEPT_NO");
+                        var nombre = $(this).find("DNOMBRE").first().text();
+                        var localidad = $(this).find("LOC").first().text();
+                        html += "<td>" + numero + "</td>";
+                        html += "<td>" + nombre + "</td>";
+                        html += "<td>" + localidad + "</td>";
+                        html += "</tr>";
+                    })
+                    $("#tabladepartamentos").html(html);
+                })
+            })
+        })
+    </script>
+</body>
+</html>
