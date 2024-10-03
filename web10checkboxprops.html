@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Props con Checkbox</h1>
+    <label for="">Seleccione número checkbox</label>
+    <input type="range" id="rango" min="1" max="50" value="1">
+    <span id="valorrango"></span>
+    <h1 id="resultado" style="color: blue;">0</h1>
+    <div id="contenedor"></div>
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#rango").change(function() {
+                var numeroElementos = parseInt($(this).val());
+                $("#valorrango").text(numeroElementos)
+                $("#contenedor").html("");
+                for (var i = 1; i <= numeroElementos; i++) {
+                    var aleatorio = parseInt(Math.floor(Math.random()*500) + 1)
+                    var chk = $("<input>"
+                    , { "value": aleatorio, "type": "checkbox"});
+                    var label = $("<label>", { "text": aleatorio});
+                        $("#contenedor").append(chk);
+                        $("#contenedor").append(label);
+                    chk.change(function() {
+                        var resultado = 0;
+                        //RECORREMOS TODOS LOS CHECKBOX
+                        $("input[type='checkbox']:checked").each(function() {
+                            var valor = parseInt($(this).val());
+                            resultado += valor;
+                        });
+                        $("#resultado").text(resultado);
+                    })
+                }
+            })
+        })
+    </script>
+    
+</body>
+</html>
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .customCheckBoxHolder {
+        margin: 5px;
+        display: flex;
+        }
+
+        .customCheckBox {
+        width: fit-content;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        user-select: none;
+        padding: 2px 8px;
+        background-color: rgba(0, 0, 0, 0.16);
+        border-radius: 0px;
+        color: rgba(255, 255, 255, 0.7);
+        transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+        transition-duration: 300ms;
+        transition-property: color, background-color, box-shadow;
+        display: flex;
+        height: 32px;
+        align-items: center;
+        box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 1px 0px inset, rgba(255, 255, 255, 0.17) 0px 1px 1px 0px;
+        outline: none;
+        justify-content: center;
+        min-width: 55px;
+        }
+
+        .customCheckBox:hover {
+        background-color: #2c2c2c;
+        color: white;
+        box-shadow: rgba(0, 0, 0, 0.23) 0px -4px 1px 0px inset, rgba(255, 255, 255, 0.17) 0px -1px 1px 0px, rgba(0, 0, 0, 0.17) 0px 2px 4px 1px;
+        }
+
+        .customCheckBox .inner {
+        font-size: 18px;
+        font-weight: 900;
+        pointer-events: none;
+        transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+        transition-duration: 300ms;
+        transition-property: transform;
+        transform: translateY(0px);
+        }
+
+        .customCheckBox:hover .inner {
+        transform: translateY(-2px);
+        }
+
+        /* Multiple Checkboxes can be chained together for a radio input */
+        .customCheckBoxWrapper:first-of-type .customCheckBox {
+        border-bottom-left-radius: 5px;
+        border-top-left-radius: 5px;
+        border-right: 0px;
+        }
+
+        .customCheckBoxWrapper:last-of-type .customCheckBox {
+        border-bottom-right-radius: 5px;
+        border-top-right-radius: 5px;
+        border-left: 0px;
+        }
+
+        .customCheckBoxInput {
+        display: none;
+        }
+
+        .customCheckBoxInput:checked + .customCheckBoxWrapper .customCheckBox {
+        background-color: #2d6737;
+        color: white;
+        box-shadow: rgba(0, 0, 0, 0.23) 0px -4px 1px 0px inset, rgba(255, 255, 255, 0.17) 0px -1px 1px 0px, rgba(0, 0, 0, 0.17) 0px 2px 4px 1px;
+        }
+
+        .customCheckBoxInput:checked + .customCheckBoxWrapper .customCheckBox .inner {
+        transform: translateY(-2px);
+        }
+
+        .customCheckBoxInput:checked + .customCheckBoxWrapper .customCheckBox:hover {
+        background-color: #34723f;
+        box-shadow: rgba(0, 0, 0, 0.26) 0px -4px 1px 0px inset, rgba(255, 255, 255, 0.17) 0px -1px 1px 0px, rgba(0, 0, 0, 0.15) 0px 3px 6px 2px;
+        }
+
+        .customCheckBoxWrapper .customCheckBox:hover .inner {
+        transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <h1>Props con Checkbox</h1>
+    <label for="">Seleccione número checkbox</label>
+    <input type="range" id="rango" min="1" max="50" value="1">
+    <span id="valorrango"></span>
+    <h1 id="resultado" style="color: blue;">0</h1>
+    <div id="contenedor" class="customCheckBoxHolder"></div>
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#rango").change(function() {
+                var numeroElementos = parseInt($(this).val());
+                $("#valorrango").text(numeroElementos)
+                $("#contenedor").html("");
+                for (var i = 1; i <= numeroElementos; i++) {
+                    var aleatorio = parseInt(Math.floor(Math.random()*500) + 1)
+                    var chk = $("<input>"
+                        , { "value": aleatorio, "type": "checkbox"});
+                        chk.addClass("customCheckBoxInput");
+                    var labelbutton = $("<label>");
+                        labelbutton.addClass("customCheckBoxWrapper");
+                    var div = $("<div>");
+                        div.addClass("customCheckBox");
+                    var subdiv = $("<div>", { "text": aleatorio});
+                        subdiv.addClass("inner");
+                        $("#contenedor").append(chk);
+                        $("#contenedor").append(labelbutton);
+                        div.append(subdiv);
+                        $("#contenedor").append(div);
+                    chk.change(function() {
+                        var resultado = parseInt($("#resultado").text());
+                        var valor = parseInt($(".inner").val());
+                        //DEBEMOS PREGUNTAR POR EL VALUE DEL CHECKBOX
+                        //PARA SUMAR O RESTAR
+                        if ($(this).is(":checked") == true) {
+                            resultado += valor;
+                        } else {
+                            resultado -= valor;
+                        }
+                        $("#resultado").text(resultado);
+                    })
+                }
+            })
+        })
+    </script>
+</body>
+</html> -->
