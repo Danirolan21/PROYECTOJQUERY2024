@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 50px;
+            padding: 20px;
+            box-shadow: 0 0 10px black;
+        }
+        table td{
+            padding: 5px;
+        }
+        table tr:first-child {
+            font-weight: bold;
+        }
+        .mb-10 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Alumnos notas XML</h1>
+
+    <label>Introduzca nota</label>
+    <input class="mb-10" type="text" name="" id="cajanota">
+    <button id="botonbuscarpornota">Buscar alumnos</button>
+    <table id="tablaalumnos" border="1"></table>
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#botonbuscarpornota").click(function() {
+                var nota = $("#cajanota").val();
+                //BUSCAMOS POR NOTA MEDIANTE UN FILTRO
+                //TAL QUE ASI nota:contains(10)
+                var filtro = "nota:contains('" + nota + "')";
+                var html = "<tr><td>Nombre</td><td>Apellidos</td><td>Nota</td></tr>";
+                $.get("documents/alumnos.xml", function(data) {
+                    console.log("leyendo...");
+                    $(data).find("alumno").each(function() {
+                        var notaAlumno = parseInt($(this).find("nota").text());
+                        if (notaAlumno >= nota){
+                            var nombre = $(this).find("nombre").text();
+                            var apellidos = $(this).find("apellidos").text();
+                            html += "<tr>";
+                            html += "<td>" + nombre + "</td>";
+                            html += "<td>" + apellidos + "</td>";
+                            html += "<td>" + notaAlumno + "</td>";
+                            html += "<tr>";
+                        }
+                        $("#tablaalumnos").html(html);
+                    })
+                })                
+            })
+        })
+    </script>
+</body>
+</html>
