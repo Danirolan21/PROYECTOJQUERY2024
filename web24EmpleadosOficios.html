@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            height: 100vh;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+        .input-container {
+            position: relative;
+        }
+        .input-container-input {
+            color: black;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            outline: 2px solid black;
+            background-color: transparent;
+            transition: outline-color 500ms;
+        }
+        .input-container-input:is(:focus, :valid) {
+            outline-color: blueviolet;
+        }
+        .input-container-label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            translate: 10px 8px;
+            color: black;
+            background-color: white;
+            transition: translate 500ms, scale 500ms;
+        }
+        .input-container-input:focus + .input-container-label,
+        .input-container-input:valid + .input-container-label {
+            padding-inline: 10px;
+            translate: 0px -14px;
+            scale: 0.8;
+            background-color: black;
+            font-size: 20px;
+        }
+        button {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
+            padding: 5px;
+            border-radius: 6px;
+            background-color: coral;
+        }
+    </style>
+</head>
+<body>
+    <h1>Empleados Oficios</h1>
+    <select name="" id="selectoficios"></select>
+    <div class="input-container">
+        <label class="input-container-label">Incremento salarial:</label><br>
+        <input type="text" class="input-container-input" name="" id="cajacantidad"><br>
+    </div>
+    <button id="incrementar">Incrementar salarios</button>
+    <table id="tablaempleados">
+        <thead>
+            <tr>
+                <td>Apellido</td>
+                <td>Oficio</td>
+                <td>Salario</td>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script>
+        let urlBase = "https://apiempleadosaction.azurewebsites.net/";
+        $(document).ready(function() {
+            loadOficios();
+
+            $("#incrementar").click(function() {
+                var cantidad = parseInt($("#cajacantidad").val())
+                var oficio = $("#selectoficios").val();
+                
+                var request = "api/Empleados/IncrementarSalarioOficios/" + oficio + "/" + cantidad;
+                console.log(request);
+                
+                $.ajax({
+                    url: urlBase + request,
+                    type: "PUT",
+                    contentType: "application/json",
+                    success: function() {
+                        console.log("Modificado con Éxito");
+                        loadEmpleadosPorOficios(oficio);                        
+                    }
+                })
+            })
+
+            $("#selectoficios").change(function() {
+                var oficio = $(this).val();
+                console.log(oficio);
+                
+                loadEmpleadosPorOficios(oficio);
+            })
+        })
+
+        function loadEmpleadosPorOficios(oficio) {
+            var request = "api/Empleados/GetEmpleadosOficio/empleadosoficio/" + oficio;
+                $.getJSON(urlBase + request, function(data) {
+                    var html = "";
+                    $.each(data, function(index, empleado) {
+                        html += "<tr>";
+                            html += "<td>" + empleado.apellido + "</td>";
+                            html += "<td>" + empleado.oficio + "</td>";
+                            html += "<td>" + empleado.salario + "</td>";
+                        html += "</tr>";
+                    })
+                    $("#tablaempleados tbody").html(html)
+                })
+        }
+
+        function loadOficios(){
+            var request = "api/Empleados/GetOficios/oficios";
+            $.getJSON(urlBase + request, function(data) {
+                $.each(data, function(index, oficio) {
+                    var option = $("<option>", {text: oficio});
+                    $("#selectoficios").append(option)
+                })
+            })
+        }
+    </script>
+</body>
+</html>
